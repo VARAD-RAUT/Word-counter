@@ -1,0 +1,22 @@
+<header class="border-b border-hairline bg-canvas">
+  <nav class="page-container flex h-16 items-center justify-between" aria-label="Main navigation">
+    <a href="/word-counter/" aria-label="zyvento.io home"><img class="logo-light" src="/logo.svg" width="176" height="32" alt="zyvento.io" /><img class="logo-dark" src="/logo-dark.svg" width="176" height="32" alt="" /></a>
+    <div class="hidden items-center gap-1 mobile:flex"><a class="rounded-full px-3 py-2 text-sm text-body hover:bg-canvas-soft-2 hover:text-ink" href="/word-counter/#how-to-use">How it works</a><a class="rounded-full px-3 py-2 text-sm text-body hover:bg-canvas-soft-2 hover:text-ink" href="/word-counter/#faq">FAQ</a></div>
+    <div class="flex items-center gap-2">
+      <button id="theme-toggle" class="flex min-h-11 items-center gap-2 rounded-control border border-hairline px-3 py-2 text-sm font-medium text-ink hover:bg-canvas-soft-2" type="button" aria-pressed="false" aria-label="Switch to dark mode"><svg aria-hidden="true" class="size-4" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5v1.25M8 13.25v1.25M14.5 8h-1.25M2.75 8H1.5M12.6 3.4l-.9.9M4.3 11.7l-.9.9M12.6 12.6l-.9-.9M4.3 4.3l-.9-.9" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg><span id="theme-label" class="hidden sm:inline">Dark mode</span></button>
+      <button id="mobile-menu-button" class="min-h-11 rounded-control border border-hairline px-3 py-2 text-sm font-medium text-ink mobile:hidden" type="button" aria-expanded="false" aria-controls="mobile-menu">Menu</button>
+    </div>
+  </nav>
+  <div id="mobile-menu" class="page-container hidden border-t border-hairline py-3 mobile:hidden"><a class="block rounded-control px-3 py-3 text-sm text-body hover:bg-canvas-soft-2 hover:text-ink" href="/word-counter/#how-to-use">How it works</a><a class="block rounded-control px-3 py-3 text-sm text-body hover:bg-canvas-soft-2 hover:text-ink" href="/word-counter/#faq">FAQ</a></div>
+</header>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeLabel = document.getElementById('theme-label');
+  const applyThemeLabel = () => { const dark = document.documentElement.dataset.theme === 'dark'; themeToggle?.setAttribute('aria-pressed', String(dark)); themeToggle?.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode'); if (themeLabel) themeLabel.textContent = dark ? 'Light mode' : 'Dark mode'; };
+  applyThemeLabel();
+  themeToggle?.addEventListener('click', () => { const dark = document.documentElement.dataset.theme !== 'dark'; document.documentElement.dataset.theme = dark ? 'dark' : 'light'; try { localStorage.setItem('zyvento-theme', dark ? 'dark' : 'light'); } catch {} applyThemeLabel(); });
+  const menuButton = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+  menuButton?.addEventListener('click', () => { const open = menuButton.getAttribute('aria-expanded') === 'true'; menuButton.setAttribute('aria-expanded', String(!open)); menu?.classList.toggle('hidden', open); });
+</script>

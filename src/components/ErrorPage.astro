@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import '../styles/global.css';
+
+interface Props { code: string; title: string; description: string; }
+const { code, title, description } = Astro.props;
+---
+<Layout title={`${code} – ${title}`} description={description}>
+  <SiteHeader />
+  <main class="page-container flex min-h-[calc(100vh-225px)] items-center py-20">
+    <section class="max-w-2xl">
+      <p class="eyebrow text-link">zyvento.io / {code}</p>
+      <h1 class="mt-5 text-4xl font-semibold leading-tight tracking-[-2px] text-ink sm:text-5xl">{title}</h1>
+      <p class="mt-5 max-w-xl text-lg leading-7 text-body">{description}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a class="rounded-full bg-primary px-5 py-3 text-base font-medium text-white hover:bg-black" href="/word-counter/">Open word counter</a>
+        <a class="rounded-full border border-hairline bg-canvas px-5 py-3 text-base font-medium text-ink hover:bg-canvas-soft-2" href="/">Go to home</a>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</Layout>

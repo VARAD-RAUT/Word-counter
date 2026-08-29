@@ -1,0 +1,78 @@
+<section id="counter" class="page-container relative z-10 -mt-8 pb-20" aria-labelledby="tool-heading">
+  <div class="overflow-hidden rounded-large bg-canvas shadow-float">
+    <div class="border-b border-hairline px-5 py-5 sm:px-8">
+      <div class="flex flex-wrap items-end justify-between gap-5">
+        <div>
+          <p class="eyebrow text-mute">Text tool / 01</p>
+          <h2 id="tool-heading" class="mt-2 text-2xl font-semibold tracking-[-0.96px] text-ink">Your word count, at a glance.</h2>
+        </div>
+        <p class="flex items-center gap-2 text-sm text-body"><span class="size-2 rounded-full bg-link" aria-hidden="true"></span>Your text stays in your browser.</p>
+      </div>
+    </div>
+
+    <div class="grid tablet:grid-cols-[minmax(0,1.5fr)_minmax(280px,1fr)]">
+      <div class="border-b border-hairline p-5 tablet:border-b-0 tablet:border-r sm:p-8">
+        <label for="text-input" class="sr-only">Text to count</label>
+        <textarea id="text-input" class="min-h-72 w-full resize-y rounded-control border border-hairline bg-canvas-soft-2 p-4 text-base leading-7 text-ink placeholder:text-mute focus:border-link focus:bg-canvas focus:outline-none sm:min-h-80" placeholder="Paste or type your text here..." spellcheck="true"></textarea>
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <p id="editor-status" class="text-sm text-mute" aria-live="polite">Ready when you are.</p>
+          <div class="flex flex-wrap gap-2">
+            <button id="copy-button" class="rounded-full border border-hairline bg-canvas px-4 py-2 text-sm font-medium text-ink transition hover:border-hairline-strong hover:bg-canvas-soft-2" type="button">Copy</button>
+            <button id="download-button" class="rounded-full border border-hairline bg-canvas px-4 py-2 text-sm font-medium text-ink transition hover:border-hairline-strong hover:bg-canvas-soft-2" type="button">Download .txt</button>
+            <button id="clear-button" class="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-black" type="button">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-5 sm:p-8">
+        <div class="border-b border-hairline pb-6">
+          <p class="text-sm font-medium text-body">Words</p>
+          <output id="words" class="mt-1 block text-6xl font-semibold tracking-[-2.4px] text-ink" aria-live="polite">0</output>
+          <p class="mt-1 text-sm text-mute">The main measure of your text.</p>
+        </div>
+        <dl class="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 text-sm">
+          {[
+            ['characters', 'Characters'], ['characters-no-spaces', 'No spaces'], ['sentences', 'Sentences'], ['paragraphs', 'Paragraphs'], ['lines', 'Lines'], ['reading-time', 'Reading time'], ['speaking-time', 'Speaking time'], ['average-sentence', 'Words / sentence'], ['average-length', 'Average word length'],
+          ].map(([id, label]) => <div><dt class="text-body">{label}</dt><dd id={id} class="mt-1 font-medium text-ink">0</dd></div>)}
+        </dl>
+      </div>
+    </div>
+
+    <div class="border-t border-hairline bg-canvas-soft px-5 py-5 sm:px-8">
+      <div class="grid gap-5 tablet:grid-cols-2">
+        <label class="flex items-center justify-between gap-4 text-sm text-body" for="word-goal">Word goal <input id="word-goal" class="w-28 rounded-control border border-hairline bg-canvas px-3 py-2 text-right text-ink" type="number" min="1" inputmode="numeric" placeholder="Optional" /></label>
+        <label class="flex items-center justify-between gap-4 text-sm text-body" for="character-limit">Character limit <input id="character-limit" class="w-28 rounded-control border border-hairline bg-canvas px-3 py-2 text-right text-ink" type="number" min="1" inputmode="numeric" placeholder="Optional" /></label>
+      </div>
+      <div id="goal-output" class="mt-4 hidden" aria-live="polite"><div class="flex justify-between text-sm"><span id="goal-current">0 / 0 words</span><span id="goal-remaining">Set a goal to track progress.</span></div><div class="mt-2 h-1.5 overflow-hidden rounded-full bg-hairline"><div id="goal-progress" class="h-full rounded-full bg-link transition-[width]" style="width: 0%"></div></div></div>
+      <p id="limit-output" class="mt-3 hidden text-sm text-error" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="mt-4 text-center text-xs text-mute">Counting happens locally. We do not upload, save, or log your text.</p>
+</section>
+
+<script>
+  import { countText } from '../lib/word-counter';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const input = $('text-input') as HTMLTextAreaElement;
+  const set = (id: string, value: string | number) => { $(id).textContent = String(value); };
+  const formatMinutes = (minutes: number) => minutes ? `${minutes} min` : '0 min';
+
+  function update() {
+    const stats = countText(input.value);
+    set('words', stats.words); set('characters', stats.characters); set('characters-no-spaces', stats.charactersNoSpaces);
+    set('sentences', stats.sentences); set('paragraphs', stats.paragraphs); set('lines', stats.lines);
+    set('reading-time', formatMinutes(stats.readingMinutes)); set('speaking-time', formatMinutes(stats.speakingMinutes));
+    set('average-sentence', stats.averageWordsPerSentence); set('average-length', stats.averageWordLength);
+    const goal = Number(($('word-goal') as HTMLInputElement).value);
+    $('goal-output').classList.toggle('hidden', !goal);
+    if (goal) { const percent = Math.min(100, Math.round((stats.words / goal) * 100)); set('goal-current', `${stats.words.toLocaleString()} / ${goal.toLocaleString()} words`); set('goal-remaining', stats.words >= goal ? `${percent}% complete` : `${(goal - stats.words).toLocaleString()} remaining · ${percent}%`); ($('goal-progress') as HTMLElement).style.width = `${percent}%`; }
+    const limit = Number(($('character-limit') as HTMLInputElement).value); const over = limit && stats.characters > limit;
+    $('limit-output').classList.toggle('hidden', !limit); if (limit) set('limit-output', over ? `${stats.characters - limit} characters over the limit.` : `${limit - stats.characters} characters remaining.`);
+    $('limit-output').classList.toggle('text-error', Boolean(over)); $('limit-output').classList.toggle('text-body', Boolean(limit && !over));
+  }
+  input.addEventListener('input', update); $('word-goal').addEventListener('input', update); $('character-limit').addEventListener('input', update);
+  $('clear-button').addEventListener('click', () => { input.value = ''; input.focus(); set('editor-status', 'Cleared.'); update(); });
+  $('copy-button').addEventListener('click', async () => { if (!input.value) return set('editor-status', 'There is no text to copy yet.'); try { await navigator.clipboard.writeText(input.value); set('editor-status', 'Copied to your clipboard.'); } catch { set('editor-status', 'Copy is unavailable here. Select the text to copy it manually.'); } });
+  $('download-button').addEventListener('click', () => { const blob = new Blob([input.value], { type: 'text/plain' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'zyvento-word-counter.txt'; link.click(); URL.revokeObjectURL(link.href); set('editor-status', 'Downloaded as a text file.'); });
+</script>

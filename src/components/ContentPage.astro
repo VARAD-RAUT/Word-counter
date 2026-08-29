@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import '../styles/global.css';
+
+interface Props { title: string; description: string; eyebrow: string; updated?: string; }
+const { title, description, eyebrow, updated = 'Last updated: August 29, 2026' } = Astro.props;
+---
+<Layout title={title} description={description}>
+  <SiteHeader />
+  <main class="page-container py-16 sm:py-24">
+    <div class="max-w-3xl">
+      <p class="eyebrow text-mute">{eyebrow}</p>
+      <h1 class="mt-4 text-4xl font-semibold leading-tight tracking-[-2px] text-ink sm:text-5xl">{title}</h1>
+      <p class="mt-5 text-lg leading-7 text-body">{description}</p>
+      <p class="mt-4 text-xs text-mute">{updated}</p>
+    </div>
+    <article class="prose-copy mt-14 max-w-3xl space-y-10 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-[-0.96px] [&_h2]:text-ink [&_h3]:text-lg [&_h3]:font-medium [&_h3]:text-ink [&_a]:text-link [&_a]:underline [&_a]:underline-offset-4 [&_li]:ml-5 [&_li]:list-disc">
+      <slot />
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>

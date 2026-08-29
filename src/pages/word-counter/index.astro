@@ -1,0 +1,84 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import WordCounter from '../../components/WordCounter.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import '../../styles/global.css';
+
+const faqs = [
+  ['What is a word counter?', 'A word counter measures the words in your text and can also show characters, sentences, paragraphs, and estimated reading time.'],
+  ['How does an online word counter work?', 'This counter reads the text in your browser, separates word-like text from punctuation and spaces, and updates the results as you type.'],
+  ['Does punctuation count as a word?', 'No. Punctuation is not a word on its own, though it can sit beside a word without changing the count.'],
+  ['Do hyphenated words count as one word?', 'Hyphenated compounds such as “well-known” are treated as one word.'],
+  ['Are spaces counted as characters?', 'Yes. Characters includes spaces; “No spaces” excludes whitespace.'],
+  ['Does the word counter work on mobile?', 'Yes. The editor and controls are designed for touch screens and small displays.'],
+  ['Is my text uploaded?', 'No. Counting, copying, and downloading happen locally in your browser.'],
+  ['How accurate is the word counter?', 'It is accurate for common English text and handles many Unicode scripts, but language-specific word boundaries can vary.'],
+  ['How long does it take to read 1000 words?', 'At an assumed 200 words per minute, about 5 minutes. Actual reading speed varies.'],
+];
+
+const faqSchema = faqs.map(([question, answer]) => ({
+  '@type': 'Question',
+  name: question,
+  acceptedAnswer: { '@type': 'Answer', text: answer },
+}));
+---
+
+<Layout>
+  <SiteHeader />
+
+  <main>
+    <section class="relative overflow-hidden bg-canvas px-4 pb-20 pt-16 sm:pt-24">
+      <div class="pointer-events-none absolute inset-x-0 top-0 mx-auto h-80 max-w-5xl opacity-30 blur-3xl" style="background: radial-gradient(circle at 25% 20%, #00dfd8 0, transparent 34%), radial-gradient(circle at 58% 12%, #7928ca 0, transparent 34%), radial-gradient(circle at 82% 28%, #f9cb28 0, transparent 28%), radial-gradient(circle at 45% 65%, #ff0080 0, transparent 28%);" aria-hidden="true"></div>
+      <div class="page-container relative text-center">
+        <p class="eyebrow text-body">A clear measure for every draft</p>
+        <h1 class="mx-auto mt-5 max-w-3xl text-4xl font-semibold leading-none tracking-[-2px] text-ink sm:text-5xl sm:tracking-[-2.4px]">Free Word Counter Online</h1>
+        <p class="mx-auto mt-5 max-w-xl text-lg leading-7 text-body">Count words, characters, sentences, paragraphs and more with our free online word counter. Results update instantly as you type or paste your text.</p>
+        <p class="mx-auto mt-4 max-w-xl text-sm leading-6 text-mute">No signup required. Your text stays in your browser while it is being counted.</p>
+      </div>
+    </section>
+
+    <WordCounter />
+
+    <div class="page-container pb-24">
+      <section id="how-to-use" class="grid gap-10 border-b border-hairline py-20 tablet:grid-cols-[.8fr_1.2fr]">
+        <div><p class="eyebrow text-mute">The essentials</p><h2 class="mt-3 text-3xl font-semibold tracking-[-1.28px] text-ink">What Does This Word Counter Calculate?</h2></div>
+        <div class="space-y-12">
+          <div><h3 class="text-xl font-semibold tracking-[-0.6px] text-ink">Words, characters, and structure.</h3><p class="prose-copy mt-3">The tool shows words, total characters, characters without spaces, sentences, paragraphs, and lines. It also estimates reading time, speaking time, average words per sentence, and average word length.</p></div>
+          <div><h3 class="text-xl font-semibold tracking-[-0.6px] text-ink">How to Use the Word Counter</h3><ol class="prose-copy mt-3 list-decimal space-y-2 pl-5"><li>Paste or type your text into the editor.</li><li>View your word and character counts instantly.</li><li>Review the additional statistics beside the editor.</li><li>Set an optional word goal or character limit.</li><li>Copy or download your text when you are finished.</li></ol></div>
+          <div><h3 class="text-xl font-semibold tracking-[-0.6px] text-ink">Word Counter for Essays and Assignments</h3><p class="prose-copy mt-3">Paste an essay, report, or research draft to check its total word count, characters, sentences, paragraphs, and estimated reading time. The optional word goal helps you see how much writing remains without saving your draft anywhere.</p></div>
+        </div>
+      </section>
+
+      <section class="grid gap-10 border-b border-hairline py-20 tablet:grid-cols-2">
+        <div><p class="eyebrow text-mute">Methodology</p><h2 class="mt-3 text-3xl font-semibold tracking-[-1.28px] text-ink">How Does the Word Counter Count Words?</h2></div>
+        <div class="prose-copy space-y-4"><p>Words are identified from runs of letters, marks, and numbers. Spaces, tabs, line breaks, punctuation, and emojis do not count by themselves.</p><p>Apostrophes and hyphens inside a word stay connected, so “don't” and “well-known” each count as one. Numbers and decimals are recognized as word-like text. Unicode-aware rules support accented writing and many non-Latin scripts, although language-specific segmentation can differ.</p><p>Characters includes every displayed Unicode character, including spaces. The separate no-spaces measure removes whitespace.</p></div>
+      </section>
+
+      <section class="grid gap-10 border-b border-hairline py-20 tablet:grid-cols-2">
+        <div><p class="eyebrow text-mute">Practical guide</p><h2 class="mt-3 text-3xl font-semibold tracking-[-1.28px] text-ink">Word Count vs Character Count</h2></div>
+        <div class="prose-copy space-y-4"><p>Word count tells you how many word-like units are in a piece of writing. Character count measures the individual letters, numbers, punctuation, and spaces. Use character count when a form or platform sets a tight length limit.</p><p>For an essay, paste the complete draft into the tool, then compare the word total with your assignment brief. Page counts are only rough: font, size, spacing, margins, and paper size all change how many words fit on a page.</p><p>Reading time uses 200 words per minute; speaking time uses 130 words per minute. Both are estimates, not promises.</p></div>
+      </section>
+
+      <section class="grid gap-10 border-b border-hairline py-20 tablet:grid-cols-2">
+        <div><p class="eyebrow text-mute">Privacy</p><h2 class="mt-3 text-3xl font-semibold tracking-[-1.28px] text-ink">Is My Text Private?</h2></div>
+        <div class="prose-copy space-y-4"><p>The core word-counting process runs in your browser, so your text does not need to be uploaded to a server to calculate the count.</p><p>The page does not put your text in the URL or save it in local storage. Copy and download actions are also handled by your browser.</p></div>
+      </section>
+
+      <section class="border-b border-hairline py-20"><div class="flex flex-wrap items-end justify-between gap-5"><div><p class="eyebrow text-mute">Reference</p><h2 class="mt-3 text-3xl font-semibold tracking-[-1.28px] text-ink">Common word counts.</h2></div><p class="max-w-sm text-sm leading-6 text-body">Use these as planning markers. The final page length depends on formatting and your content.</p></div><div class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-card bg-hairline sm:grid-cols-4 tablet:grid-cols-7">{[['100','Short note'],['250','Brief essay'],['500','Article'],['750','Long essay'],['1000','Chapter'],['1500','Report'],['2000','Long article']].map(([count, label]) => <div class="bg-canvas p-4"><p class="text-xl font-semibold tracking-[-0.6px] text-ink">{count}</p><p class="mt-1 text-xs text-body">{label}</p></div>)}</div></section>
+
+      <section id="faq" class="py-20"><div class="max-w-2xl"><p class="eyebrow text-mute">Questions, answered</p><h2 class="mt-3 text-3xl font-semibold tracking-[-1.28px] text-ink">Frequently Asked Questions</h2></div><div class="mt-8 divide-y divide-hairline border-y border-hairline">{faqs.map(([question, answer]) => <details class="group py-5"><summary class="flex cursor-pointer list-none items-center justify-between gap-5 text-base font-medium text-ink"><span>{question}</span><span class="text-xl text-mute transition group-open:rotate-45" aria-hidden="true">+</span></summary><p class="prose-copy mt-3 max-w-2xl">{answer}</p></details>)}</div></section>
+    </div>
+  </main>
+
+  <SiteFooter />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'WebApplication', name: 'Word Counter Online', description: 'A free online word counter for words, characters, sentences, paragraphs, and reading time.', url: 'https://zyvento.io/word-counter/', applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+      { '@type': 'FAQPage', mainEntity: faqSchema },
+    ],
+  })} />
+
+</Layout>
