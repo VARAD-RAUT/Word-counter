@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
-  <title id="title">zyvento.io mark</title>
+  <title id="title">zyvento mark</title>
   <desc id="desc">A geometric Z-shaped mark with a blue cursor accent</desc>
   <rect width="64" height="64" rx="12" fill="#171717"/>
   <path d="M17 19h29L18 45h29" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
